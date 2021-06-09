@@ -2,13 +2,22 @@ import requests
 import json
 import re
 
-yoBoys = """$type":"com.linkedin.voyager.common.TextViewModel"},"url":"http://animationireland.com",  """
+file1 = open("aboutUs.txt","r") 
 
-matpat = ""
+yoBoys = file1.read()
 
-websiteName = re.findall(r"\$type\"\:\"com\.linkedin\.voyager\.common\.TextViewModel\"\}\,\"url\"\:\".*\"\,", yoBoys)[0].strip()
-websiteName = websiteName.split("\":\"")[2]
-websiteName = websiteName.split("\",")[0]
+websiteName = re.findall(r"\<span class\=\"link\-without\-visited\-state\" dir\=\"ltr\"\>.*?\<\/span\>", yoBoys, re.MULTILINE | re.DOTALL)[0]
+websiteName = websiteName.split(">")[1].strip()
+websiteName = websiteName.split("<")[0].strip()
+
+
+
 
 
 print(websiteName)
+
+"""
+<span class="link-without-visited-state" dir="ltr">
+              http://www.onanimationstudios.com
+            </span>
+"""

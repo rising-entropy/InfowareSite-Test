@@ -67,22 +67,24 @@ def getMeTheLinks(queryToAsk, numberOfPages):
         companyAboutUs = company+"about/"
         browser.get(companyAboutUs)
         
+        sleep(2)
         aboutUsPage = browser.page_source
         
-        f = open("aboutUs.txt", "w")
-        f.write(aboutUsPage)   
-        f.close()
+        try:
+            websiteName = re.findall(r"\<span class\=\"link\-without\-visited\-state\" dir\=\"ltr\"\>.*?\<\/span\>", aboutUsPage, re.MULTILINE | re.DOTALL)[0]
+            websiteName = websiteName.split(">")[1].strip()
+            websiteName = websiteName.split("<")[0].strip()
+        except:
+            websiteName = ""
+            
         
-        websiteName = re.findall(r"\$type\"\:\"com\.linkedin\.voyager\.common\.TextViewModel\"\}\,\"url\"\:\".*\"\,", aboutUsPage)[0].strip()
-        websiteName = websiteName.split("\":\"")[2]
-        websiteName = websiteName.split("\",")[0]
+            
+        print(websiteName)
         
+        # f = open("aboutUs.txt", "w")
+        # f.write(aboutUsPage)   
+        # f.close()
         
-        
-        break
-        
-    
-
-    
+        # break
 
 eel.start('main.html', size=(1000, 1000))
