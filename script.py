@@ -40,11 +40,13 @@ def getMeTheLinks(queryToAsk, numberOfPages):
 
     lstOfCompanyLinks = []
 
+    #indian companies
+
     for i in range(numberOfPages):
         if i == 0:
-            thatLink = "https://www.linkedin.com/search/results/companies/?keywords=" + queryToAsk + "&origin=SWITCH_SEARCH_VERTICAL"
+            thatLink = "https://www.linkedin.com/search/results/companies/?companyHqGeo=%5B%22102713980%22%5D&keywords=" + queryToAsk + "&origin=FACETED_SEARCH"
         else:
-            thatLink = "https://www.linkedin.com/search/results/companies/?keywords=" + queryToAsk + "&origin=SWITCH_SEARCH_VERTICAL"+"&page="+str(i+1)
+            thatLink = "https://www.linkedin.com/search/results/companies/?companyHqGeo=%5B%22102713980%22%5D&keywords=" + queryToAsk + "&origin=FACETED_SEARCH"+"&page="+str(i+1)
         sleep(1)
         
         browser.get(thatLink)
