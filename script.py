@@ -39,15 +39,6 @@ def getMeTheLinks(queryToAsk, numberOfPages):
     sleep(5)
 
     lstOfCompanyLinks = []
-
-    #indian companies
-    
-    # browser.get("https://www.linkedin.com/company/animation-circle-studio/about/")
-    # aboutUsPage = browser.page_source
-    # f = open("aboutUs.txt", "w")
-    # f.write(aboutUsPage)   
-    # f.close()
-    # return 0
     
 
     for i in range(numberOfPages):
@@ -73,46 +64,52 @@ def getMeTheLinks(queryToAsk, numberOfPages):
     companyToEmployees = {}
     companyToAbout = {}
     
-    for company in lstOfCompanyLinks:
-        companyAboutUs = company+"about/"
-        browser.get(companyAboutUs)
-        
-        sleep(2)
-        aboutUsPage = browser.page_source
-        
-        #website name
-        try:
-            websiteName = re.findall(r"\<span class\=\"link\-without\-visited\-state\" dir\=\"ltr\"\>.*?\<\/span\>", aboutUsPage, re.MULTILINE | re.DOTALL)[0]
-            websiteName = websiteName.split(">")[1].strip()
-            websiteName = websiteName.split("<")[0].strip()
-        except:
-            websiteName = ""
+    with open('companyData.csv', mode='w') as wfile:
+        writer = csv.writer(wfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow(["Company Name", "Company LinkedIn Link", "Company Website", "Phone Number", "Company Size"])
+    
+        for company in lstOfCompanyLinks:
+            companyAboutUs = company+"about/"
+            browser.get(companyAboutUs)
             
-        
-        #phone
-        try:
-            phoneNumber = re.findall(r"\<span aria\-hidden\=\"true\" class\=\"link\-without\-visited\-state\" dir\=\"ltr\"\>.*?\<\/span\>", aboutUsPage, re.MULTILINE | re.DOTALL)[0]
-            phoneNumber = phoneNumber.split(">")[1].strip()
-            phoneNumber = phoneNumber.split("<")[0].strip()
-        except:
-            phoneNumber=""
+            sleep(2)
+            aboutUsPage = browser.page_source
             
-        #company size
-        try:
-            companySize = re.findall(r"Company size.*?\<\/dt\>.*?\<dd class\=\"org\-about\-company\-module\_\_company\-size\-definition\-text t\-14 t\-black\-\-light mb1 fl\"\>.*?\<\/dd\>", aboutUsPage, re.MULTILINE | re.DOTALL)[0]
-            companySize = companySize.split(">")[2].strip()
-            companySize = companySize.split("<")[0].strip()
-        except:
-            companySize = ""
+            #website name
+            try:
+                websiteName = re.findall(r"\<span class\=\"link\-without\-visited\-state\" dir\=\"ltr\"\>.*?\<\/span\>", aboutUsPage, re.MULTILINE | re.DOTALL)[0]
+                websiteName = websiteName.split(">")[1].strip()
+                websiteName = websiteName.split("<")[0].strip()
+            except:
+                websiteName = ""
+                
             
-        #company name
-        try:
-            companyName = re.findall(r"\<h1 class\=\"t\-24 t\-black t\-bold full\-width\" title\=\".*?\"\>", aboutUsPage, re.MULTILINE | re.DOTALL)[0]
-            companyName = companyName.split("title=")[1]
-            companyName = companyName.split("\"")[1]
-        except:
-            companyName = ""
+            #phone
+            try:
+                phoneNumber = re.findall(r"\<span aria\-hidden\=\"true\" class\=\"link\-without\-visited\-state\" dir\=\"ltr\"\>.*?\<\/span\>", aboutUsPage, re.MULTILINE | re.DOTALL)[0]
+                phoneNumber = phoneNumber.split(">")[1].strip()
+                phoneNumber = phoneNumber.split("<")[0].strip()
+            except:
+                phoneNumber=""
+                
+            #company size
+            try:
+                companySize = re.findall(r"Company size.*?\<\/dt\>.*?\<dd class\=\"org\-about\-company\-module\_\_company\-size\-definition\-text t\-14 t\-black\-\-light mb1 fl\"\>.*?\<\/dd\>", aboutUsPage, re.MULTILINE | re.DOTALL)[0]
+                companySize = companySize.split(">")[2].strip()
+                companySize = companySize.split("<")[0].strip()
+            except:
+                companySize = ""
+                
+            #company name
+            try:
+                companyName = re.findall(r"\<h1 class\=\"t\-24 t\-black t\-bold full\-width\" title\=\".*?\"\>", aboutUsPage, re.MULTILINE | re.DOTALL)[0]
+                companyName = companyName.split("title=")[1]
+                companyName = companyName.split("\"")[1]
+            except:
+                companyName = ""
             
-        print(companyName, companySize, phoneNumber, websiteName)
+            writer.writerow([companyName, company, websiteName, phoneNumber, companySize])
+            
+    browser.quit()
             
 eel.start('main.html', size=(1000, 1000))
