@@ -11,14 +11,17 @@
                     $("#btn").click(function(){
                         eel.getMeTheLinks($("#query").val(), $('#pages').val())(
                             (list) => {
+
+
                                 let texto = "";
-                                texto += "<br><h3>Resulting Data:</h3><br>";
+                                texto += "<br><h3>Resulting Links:</h3><br>";
                                 console.log(list);
                                 for(let i=0; i<list.length; i++)
                                 {
-                                  texto += "Name: "+list[i][0]+", <a href=' "+ list[i][1] +"'>Linkedin</a>, "+"<a href='"+list[i][2]+"'>Website</a> "+list[i][3]+", Company Size: "+list[i][4]+", Domain: "+list[i][5]+".<br><br><br>";
+                                    texto += "<a href='"+list[i]+"'>" + list[i] + "</a><br>";
                                 }
                                 $('#results').append(texto);
+
                             }
                             );
                     });
@@ -61,7 +64,7 @@
         <br>
         <div class="container">
             <div class="row">
-              <div class="col-sm-9 col-md-7 col-lg-7 mx-auto">
+              <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                 <div class="card card-signin my-5">
                   <div class="card-body">
                     <div id="results">

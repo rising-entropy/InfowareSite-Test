@@ -14,19 +14,12 @@ import re
 import json
 import validators
 
-
-import cx_Oracle
-con = cx_Oracle.connect('mydb/mydb@localhost:1521/xe')
-cursor = con.cursor()
-
-
 eel.init("web")
 
 @eel.expose
 def getMeTheLinks(queryToAsk, numberOfPages):
     
     numberOfPages = int(numberOfPages)
-    queryVal = queryToAsk
     queryToAsk = queryToAsk.replace(" ", "%20")
 
     browser= webdriver.Chrome('chromedriver')
@@ -70,8 +63,6 @@ def getMeTheLinks(queryToAsk, numberOfPages):
     
     companyToEmployees = {}
     companyToAbout = {}
-    
-    lstToSend = []
     
     with open('companyData.csv', mode='w') as wfile:
         writer = csv.writer(wfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -117,17 +108,8 @@ def getMeTheLinks(queryToAsk, numberOfPages):
             except:
                 companyName = ""
             
-            writer.writerow([companyName, company, websiteName, phoneNumber, companySize, queryVal])
-            lstToSend.append([companyName, company, websiteName, phoneNumber, companySize, queryVal]) 
-            
-            cursor.execute('insert into linkedin values(\''+ companyName +'\',\''+ company +'\', \''+ websiteName +'\', \''+ phoneNumber +'\', \''+ companySize +'\', \''+ queryVal +'\')')
-            con.commit()
+            writer.writerow([companyName, company, websiteName, phoneNumber, companySize])
             
     browser.quit()
-    if cursor:
-        cursor.close()
-    if con:
-        con.close()
-    return lstToSend
             
 eel.start('main.html', size=(1000, 1000))
